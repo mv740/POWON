@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - powon@localhost" uuid="56db3fa6-f5e4-41ed-bf9f-6b1a2c79e07d">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>powon.*</schema-pattern>
+      <default-schemas>powon.*</default-schemas>
+    </data-source>
+  </component>
+</project>
+
