@@ -2,16 +2,16 @@
 
 class Controller_main extends CI_Controller {
 
-    //default view public page
+    //default view public page for non members
     public function index()
     {
         $data['title'] = "Public";
         $this->load->view('templates/header',$data);
-        $this->load->view('view_main');
+        $this->load->view('view_public');
         $this->load->view('templates/footer');
     }
 
-    public function home()
+    public function homePage()
     {
         $powon_id = $this->session->userdata('powon_id');
 

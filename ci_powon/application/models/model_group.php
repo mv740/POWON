@@ -1,8 +1,6 @@
 <?php
 class Model_group extends CI_Model{
 
-
-
     function getAllGroups() {
         $sql = "SELECT * FROM `group`";
         $query = $this->db->query($sql);
@@ -23,8 +21,6 @@ class Model_group extends CI_Model{
         $query = $this->db->query($sql);
         return $query->result();
     }
-
-
 
     function getGroupsMemberOf($powon_id) {
         $sql = "SELECT * FROM member_of_group INNER JOIN `group`

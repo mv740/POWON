@@ -2,7 +2,7 @@
 
 class Controller_member extends CI_Controller {
 
-    public function login()
+    public function loginPage()
     {
         $data['title'] = "Login";
         $this->load->view('templates/header',$data);
@@ -13,8 +13,7 @@ class Controller_member extends CI_Controller {
     function authenticateLogin()
     {
         $this->load->model('model_member');
-        //$this->load->model('member','',TRUE);
-        //set validation rules
+
         $this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_checkUsernameAndPassword');
 
@@ -29,7 +28,7 @@ class Controller_member extends CI_Controller {
         else
         {
 
-            redirect('controller_main/home', 'refresh');
+            redirect('controller_main/homePage', 'refresh');
         }
     }
 
@@ -62,16 +61,102 @@ class Controller_member extends CI_Controller {
         }
     }
 
-    public function register() {
+    public function registerPage() {
         $data['title'] = "Register";
         $this->load->view('templates/header',$data);
         $this->load->view('view_register');
         $this->load->view('templates/footer');
     }
 
-    public function authenticateRegistration() {
+    public function authenticateRegistration()
+    {
+        $this->load->model('model_member');
+
+        //existing member details
+        $this->form_validation->set_rules('existing_member_first_name', 'Existing Member First Name', 'trim|required|xss_clean');
+        //validate email
+        $this->form_validation->set_rules('existing_member_email', 'Existing Member Email', 'trim|required|xss_clean');
+        //validate date
+        $this->form_validation->set_rules('existing_member_dob', 'Existing Member Date Of Birth', 'trim|required|xss_clean|callback_checkFirstNameEmailDOB');
+
+        //login details
+        $this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('username', 'Password', 'trim|required|xss_clean');
+        //validate same password
+        $this->form_validation->set_rules('retyped_password', 'Retyped Password', 'trim|required|xss_clean');
+
+        //user data
+        $this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('address', 'Address', 'trim|required|xss_clean');
+        //validate email
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
+        //validate date
+        $this->form_validation->set_rules('dob', 'Date Of Birth', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('description', 'Description', 'trim|required|xss_clean');
+
+        /**
+        $dbCheck = $this->checkFirstNameEmailDOB();
+        if($dbCheck) {
+            echo "Success";
+        } else {
+            echo "Failure";
+        }
+         **/
+
+        if($this->form_validation->run() == FALSE)
+        {
+            //field validation fail, redirect to registration
+            $data['title'] = "Registration Retry";
+            $this->load->view('templates/header',$data);
+            $this->load->view('view_register');
+            $this->load->view('templates/footer');
+        }
+        else
+        {
+            $data['title'] = "Registration Successfull! Please Login";
+            $this->load->view('templates/header',$data);
+            $this->load->view('view_login');
+            $this->load->view('templates/footer');
+        }
 
     }
+
+    function checkFirstNameEmailDOB()
+    {
+        //field validation success,  validate against database
+        $existingMemberFirstName = $this->input->post('existing_member_first_name');
+        $existingMemberEmail = $this->input->post('existing_member_email');
+        $existingMemberDOB = $this->input->post('existing_member_dob');
+
+        $result = $this->model_member->registrationCheck($existingMemberFirstName, $existingMemberEmail,$existingMemberDOB);
+
+        if($result) {
+            $newMemberData = array(
+                'username' => $this->input->post('username'),
+                'password' => $this->input->post('password'),
+                'first_name' => $this->input->post('first_name'),
+                'last_name' => $this->input->post('last_name'),
+                'address' => $this->input->post('address'),
+                'email' => $this->input->post('email'),
+                'dob' => $this->input->post('dob'),
+                'description' => $this->input->post('description'),
+            );
+
+            $this->model_member->addNewMember($newMemberData);
+            return true;
+        }
+        else {
+            $this->form_validation->set_message('checkFirstNameEmailDOB', 'Invalid Existing Member Details');
+            return false;
+        }
+    }
+
+
+
+
+
+
 
 
     public function logout() {
@@ -79,7 +164,7 @@ class Controller_member extends CI_Controller {
         redirect('controller_main', 'refresh');
     }
 
-    public function searchMembers() {
+    public function searchMembersPage() {
 
     $this->load->model('model_member');
     $data['title'] = "Search Members";
@@ -93,7 +178,7 @@ class Controller_member extends CI_Controller {
 
     }
 
-    public function viewProfile() {
+    public function viewProfilePage() {
 
         $this->load->model('model_member');
         $powon_id = $this->session->userdata('powon_id');
@@ -105,6 +190,28 @@ class Controller_member extends CI_Controller {
         $this->load->view('view_profile',$data);
         $this->load->view('templates/footer');
 
+    }
+
+    public function createRequest($reciever_id,$group_id)
+    {
+
+
+        $sender_id = $this->session->userData('powon_id');
+
+        $this->load->model('model_request');
+
+        $requestData = array (
+            'sender_powon_id' => $sender_id,
+            'reciever_powon_id' => $reciever_id,
+            'group_id' => $group_id
+        );
+
+        $this->model_request->insertRequest($requestData);
+        print_r ($requestData);
+        //$data['title'] = "Public";
+        //$this->load->view('templates/header',$data);
+        //$this->load->view('view_main');
+        //$this->load->view('templates/footer');
     }
 
 }

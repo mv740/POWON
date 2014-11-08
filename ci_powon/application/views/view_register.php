@@ -1,4 +1,4 @@
-<?php echo form_open('controller_member/authenticateLogin'); ?>
+<?php echo form_open('controller_member/authenticateRegistration'); ?>
     <fieldset>
         <legend>Existing Member Details</legend>
         <label>First Name</label>
@@ -6,7 +6,7 @@
         <label>Email</label>
         <input type = "text" name = "existing_member_email"/><br>
         <label>Date of Birth (yyyy-mm-dd)</label>
-        <input type = "text" name = "existing_member_first_name"/>
+        <input type = "text" name = "existing_member_dob"/>
     </fieldset>
     <fieldset>
         <legend>Login Details</legend>
@@ -35,3 +35,4 @@
     <input type = "submit" value = "Submit"/>
     <input type = "reset" value = "Reset"/>
 <?php echo validation_errors(); ?>
+</form>

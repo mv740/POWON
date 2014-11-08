@@ -7,19 +7,140 @@
     </database-info>
     <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
     <schema name="" catalog="powon"/>
+    <table name="group" schema="" catalog="powon" type="TABLE">
+      <column name="group_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
+      <column name="powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="description" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <primary-key name="PRIMARY" columns="group_id"/>
+      <exported-key name="fk_group_has_member1_group1" table="group_requests_member" schema="" catalog="powon" columns="group_id"/>
+      <exported-key name="fk_group_has_member_group1" table="member_of_group" schema="" catalog="powon" columns="group_id"/>
+      <exported-key name="fk_thread_group1" table="thread" schema="" catalog="powon" columns="group_id"/>
+    </table>
+    <table name="group_requests_member" schema="" catalog="powon" type="TABLE">
+      <column name="group_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="sender_powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="reciever_powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="group_id,sender_powon_id,reciever_powon_id"/>
+      <foreign-key name="fk_group_has_member1_group1" columns="group_id" ref-table="group" ref-schema="" ref-catalog="powon" ref-columns="group_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <foreign-key name="fk_group_has_member1_member1" columns="sender_powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <foreign-key name="fk_group_has_member1_member2" columns="reciever_powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <index name="dfdf_idx" unique="false" columns="reciever_powon_id"/>
+      <index name="fk_group_has_member1_group1_idx" unique="false" columns="group_id"/>
+      <index name="fk_group_has_member1_member1_idx" unique="false" columns="sender_powon_id"/>
+    </table>
     <table name="member" schema="" catalog="powon" type="TABLE">
       <column name="powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="username" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
-      <column name="password" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
-      <column name="first_name" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
-      <column name="last_name" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
-      <column name="address" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
-      <column name="email" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="username" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
+      <column name="password" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
+      <column name="first_name" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
+      <column name="last_name" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
+      <column name="address" sqlType="MEDIUMTEXT" precision="16777215" scale="0" nullable="false" jdbcType="-1"/>
+      <column name="email" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <column name="dob" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
-      <column name="description" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="status" sqlType="ENUM" precision="9" scale="0" nullable="false" jdbcType="1"/>
-      <column name="privilege" sqlType="ENUM" precision="6" scale="0" nullable="false" jdbcType="1"/>
+      <column name="description" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="status" sqlType="ENUM" precision="9" scale="0" nullable="false" jdbcType="1" def="J2FjdGl2ZSc="/>
+      <column name="privilege" sqlType="ENUM" precision="7" scale="0" nullable="false" jdbcType="1" def="J21lbWJlcic="/>
       <primary-key name="PRIMARY" columns="powon_id"/>
+      <exported-key name="fk_group_has_member1_member1" table="group_requests_member" schema="" catalog="powon" columns="sender_powon_id"/>
+      <exported-key name="fk_group_has_member1_member2" table="group_requests_member" schema="" catalog="powon" columns="reciever_powon_id"/>
+      <exported-key name="fk_member_has_thread_member1" table="member_has_thread_access" schema="" catalog="powon" columns="powon_id"/>
+      <exported-key name="fk_group_has_member_member1" table="member_of_group" schema="" catalog="powon" columns="powon_id"/>
+      <exported-key name="fk_member_has_member_member1" table="member_relates_member" schema="" catalog="powon" columns="powon_id"/>
+      <exported-key name="fk_member_has_member_member2" table="member_relates_member" schema="" catalog="powon" columns="relates_powon_id"/>
+      <exported-key name="fk_message_recieved_member1" table="message_recieved" schema="" catalog="powon" columns="reciever_powon_id"/>
+      <exported-key name="fk_message_sent_member1" table="message_sent" schema="" catalog="powon" columns="sender_powon_id"/>
+      <exported-key name="fk_post_member1" table="post" schema="" catalog="powon" columns="powon_id"/>
+      <exported-key name="fk_public_post_member1" table="public_post" schema="" catalog="powon" columns="powon_id"/>
+      <exported-key name="fk_thread_member1" table="thread" schema="" catalog="powon" columns="powon_id"/>
+      <index name="email_UNIQUE" unique="true" columns="email"/>
+      <index name="powon_id_UNIQUE" unique="true" columns="powon_id"/>
+      <index name="username_UNIQUE" unique="true" columns="username"/>
+    </table>
+    <table name="member_has_thread_access" schema="" catalog="powon" type="TABLE">
+      <column name="powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="thread_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="restriction" sqlType="ENUM" precision="23" scale="0" nullable="false" jdbcType="1" def="J3VucmVzdHJpY3RlZF9ub19jb21tZW50Jw=="/>
+      <primary-key name="PRIMARY" columns="powon_id,thread_id"/>
+      <foreign-key name="fk_member_has_thread_member1" columns="powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <foreign-key name="fk_member_has_thread_thread1" columns="thread_id" ref-table="thread" ref-schema="" ref-catalog="powon" ref-columns="thread_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <index name="fk_member_has_thread_member1_idx" unique="false" columns="powon_id"/>
+      <index name="fk_member_has_thread_thread1_idx" unique="false" columns="thread_id"/>
+    </table>
+    <table name="member_of_group" schema="" catalog="powon" type="TABLE">
+      <column name="group_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="group_id,powon_id"/>
+      <foreign-key name="fk_group_has_member_group1" columns="group_id" ref-table="group" ref-schema="" ref-catalog="powon" ref-columns="group_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <foreign-key name="fk_group_has_member_member1" columns="powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <index name="fk_group_has_member_group1_idx" unique="false" columns="group_id"/>
+      <index name="fk_group_has_member_member1_idx" unique="false" columns="powon_id"/>
+    </table>
+    <table name="member_relates_member" schema="" catalog="powon" type="TABLE">
+      <column name="powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="relates_powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="family" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
+      <column name="friend" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
+      <column name="colleague" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
+      <primary-key name="PRIMARY" columns="powon_id,relates_powon_id"/>
+      <foreign-key name="fk_member_has_member_member1" columns="powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <foreign-key name="fk_member_has_member_member2" columns="relates_powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <index name="fk_member_has_member_member1_idx" unique="false" columns="powon_id"/>
+      <index name="fk_member_has_member_member2_idx" unique="false" columns="relates_powon_id"/>
+    </table>
+    <table name="message_recieved" schema="" catalog="powon" type="TABLE">
+      <column name="message_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="content" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="date" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="reciever_powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="sender_powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="message_id,reciever_powon_id"/>
+      <foreign-key name="fk_message_recieved_member1" columns="reciever_powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_message_recieved_member1_idx" unique="false" columns="reciever_powon_id"/>
+    </table>
+    <table name="message_sent" schema="" catalog="powon" type="TABLE">
+      <column name="message_sent_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="content" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="sender_powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="reciever_powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="message_sent_id,sender_powon_id"/>
+      <foreign-key name="fk_message_sent_member1" columns="sender_powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_message_sent_member1_idx" unique="false" columns="sender_powon_id"/>
+    </table>
+    <table name="post" schema="" catalog="powon" type="TABLE">
+      <column name="post_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="content" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="date" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="thread_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="post_id,powon_id,thread_id"/>
+      <foreign-key name="fk_post_member1" columns="powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_post_thread1" columns="thread_id" ref-table="thread" ref-schema="" ref-catalog="powon" ref-columns="thread_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <index name="fk_post_member1_idx" unique="false" columns="powon_id"/>
+      <index name="fk_post_thread1_idx" unique="false" columns="thread_id"/>
+    </table>
+    <table name="public_post" schema="" catalog="powon" type="TABLE">
+      <column name="public_post_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="content" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="date" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="public_post_id,powon_id"/>
+      <foreign-key name="fk_public_post_member1" columns="powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_public_post_member1_idx" unique="false" columns="powon_id"/>
+    </table>
+    <table name="thread" schema="" catalog="powon" type="TABLE">
+      <column name="thread_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="thead_name" sqlType="VARCHAR" precision="75" scale="0" nullable="true" jdbcType="12"/>
+      <column name="group_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="powon_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="thread_id,group_id,powon_id"/>
+      <foreign-key name="fk_thread_group1" columns="group_id" ref-table="group" ref-schema="" ref-catalog="powon" ref-columns="group_id" update-rule="3" delete-rule="0" deferrability="2"/>
+      <foreign-key name="fk_thread_member1" columns="powon_id" ref-table="member" ref-schema="" ref-catalog="powon" ref-columns="powon_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="fk_member_has_thread_thread1" table="member_has_thread_access" schema="" catalog="powon" columns="thread_id"/>
+      <exported-key name="fk_post_thread1" table="post" schema="" catalog="powon" columns="thread_id"/>
+      <index name="fk_thread_group1_idx" unique="false" columns="group_id"/>
+      <index name="fk_thread_member1_idx" unique="false" columns="powon_id"/>
     </table>
   </data-source>
 </component>

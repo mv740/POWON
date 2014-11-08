@@ -7,7 +7,7 @@
         echo "<br>";
         echo "Group Description: " . $row->description;
         echo "<br>";
-        echo "Group Owner: " . $row->owner_id;
+        echo "Group Owner: " . $row->powon_id;
         echo "<br>";
     }
 
@@ -35,6 +35,8 @@
 <section>
     <h2>Members In Group</h2>
     <?php
+
+    //implement username as link to view their profile
     foreach($groupMemberInfo as $row) {
         echo "Member Name: " . $row->username;
         echo "<br>";
