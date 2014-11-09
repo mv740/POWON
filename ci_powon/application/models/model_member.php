@@ -15,28 +15,31 @@ class model_Member extends CI_Model{
 
     }
 
-
-
     function addNewMember($memberInfo) {
         $this->db->insert("member",$memberInfo);
-
-
     }
 
-    function registrationCheck($existingMemberFirstName, $existingMemberEmail,$existingMemberDOB) {
-        $sql = "SELECT powon_id
-                FROM member WHERE first_name = '$existingMemberFirstName' AND email = '$existingMemberEmail'
-                AND dob = '$existingMemberDOB'";
-        $query = $this->db->query($sql);
-        if($query -> num_rows() == 1 ) {
+    function addNewMemberToGroup($memberAndGroupId) {
+        $this->db->insert("member_of_group",$memberAndGroupId);
+    }
+
+    function existingMemberCheck($existingMemberData) {
+        $memberQuery = $this->db->get_where('member', $existingMemberData);
+        if($memberQuery->num_rows() > 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-
+    function existingMemberInGroupCheck($groupMemberData) {
+        $memberQuery = $this->db->get_where('member_of_group', $groupMemberData);
+        if($memberQuery->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     function login($username, $password) {
     $sql = "SELECT powon_id, username, password, status, privilege

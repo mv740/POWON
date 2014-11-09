@@ -15,6 +15,5 @@
         echo "Description: " . $row->description;
         echo "<br><br>";
     }
-
     ?>
 </section>

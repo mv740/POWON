@@ -36,19 +36,22 @@ class Model_group extends CI_Model{
         return $this->db->insert_id();
     }
 
-
     function insertMemberOfGroup($groupMemberData) {
         $this->db->insert("member_of_group",$groupMemberData);
     }
 
+
+    function deleteMemberFromGroup($groupMemberData) {
+        $this->db->delete("member_of_group",$groupMemberData);
+    }
+
+    function deleteGroup($groupData) {
+        $this->db->delete("group",$groupData);
+    }
 
 
     function updateMember($updateInfo) {
         $this->db->update("member",$updateInfo,"powon_id = 5");
     }
 
-    function deleteMember($deleteInfo) {
-        $this->db->delete("member",$deleteInfo);
-
-    }
 }

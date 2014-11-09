@@ -6,10 +6,12 @@
         <li><?php echo anchor('controller_group/createGroupPage', 'Create Group'); ?></li>
         <li><?php echo anchor('controller_group/searchGroupsPage','Search Groups'); ?></li>
         <li><?php echo anchor('controller_member/searchMembersPage', 'Search Members'); ?></li>
-        <li><?php echo anchor('home', 'View Requests'); ?></li>
+
+        <!-- not yet implemented !-->
         <li><?php echo anchor('home', 'View Emails'); ?></li>
         <li><?php echo anchor('home', 'Send Email'); ?></li>
         <li><?php echo anchor('home', 'Privacy Settings'); ?></li>
+
     </ul>
     <?php
         //not implemented yet
@@ -17,9 +19,9 @@
             echo "<h2>Admin Options</h2>";
             echo "<ul>";
                 echo "<li>" . anchor('home', 'Public Post') . "</li>";
-                echo "<li>" . anchor('home', 'Delete Member') . "</li>";
                 echo "<li>" . anchor('home', 'Change Member Status') . "</li>";
                 echo "<li>" . anchor('home', 'Change Member Privilege') . "</li>";
+                echo "<li>" . anchor('home', 'Delete Member') . "</li>";
                 echo "<li>" . anchor('home', 'Delete Group') . "</li>";
             echo "<ul>";
         }
@@ -45,7 +47,8 @@
         foreach($memberOfGroup as $row) {
             $group_id = $row->group_id;
             $name = $row->name;
-            echo "<li>" . anchor("controller_group/groupPage/$group_id", "$name") . "</li>";;
+            echo "<li>" . anchor("controller_group/groupPage/$group_id", "$name") . "</li>";
+            echo "<br>";
         }
         ?>
     </ul>
