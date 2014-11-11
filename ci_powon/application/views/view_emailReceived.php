@@ -17,9 +17,14 @@ echo "<br>";
         echo "<br>";
         echo "content: " . $row->content;
         echo "<br>";
+        echo "<br>";
+        echo form_open('controller_email/deleteInboxEmail');
+        echo form_hidden('data', $row->message_id);
+        echo "<input type ='submit' value ='Delete'/>";
         echo "</fieldset>";
         echo "<br>";
         echo "<br>";
+
     }
     ?>
 </section>

@@ -19,5 +19,5 @@
 <br>
 
 
-</form>
+
 <?php echo validation_errors(); ?>

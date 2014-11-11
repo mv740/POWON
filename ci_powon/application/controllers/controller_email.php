@@ -74,7 +74,22 @@ class Controller_email extends CI_Controller {
         $this->model_email->keepInSendBox($data);
         $this->model_email->sendEmail($data);
 
+        redirect('/controller_email/emailPage/', 'refresh');
+    }
 
+    public function deleteSentEmail()
+    {
+
+        $message_id = $this->input->post('data');
+        $this->load->model('model_email');
+        $this->model_email->deleteEmailFromSendBox($message_id);
+        //redirect('/controller_email/emailPage/', 'refresh');
+    }
+    public function deleteInboxEmail($message_id)
+    {
+        $this->load->model('model_email');
+        $this->model_email->deleteEmailFromInbox($message_id);
+        redirect('/controller_email/emailPage/', 'refresh');
     }
 }
 

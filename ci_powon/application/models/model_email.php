@@ -33,5 +33,13 @@ class model_Email extends CI_Model{
         $this->db->insert("message_sent",$data);
     }
 
+    function deleteEmailFromInbox($message_id)
+    {
+        $this->db->delete('message_recieved', array('message_id' => $message_id));
+    }
+    function deleteEmailFromSendBox($message_id)
+    {
+        $this->db->delete('message_sent', array('message_sent_id' =>$message_id));
+    }
 
 }
