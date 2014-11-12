@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Controller_email extends CI_Controller {
+class Controller_email extends Auth_Controller {
 
     public function emailPage() {
         $data['title'] = "Emails";
@@ -83,10 +83,11 @@ class Controller_email extends CI_Controller {
         $message_id = $this->input->post('data');
         $this->load->model('model_email');
         $this->model_email->deleteEmailFromSendBox($message_id);
-        //redirect('/controller_email/emailPage/', 'refresh');
+        redirect('/controller_email/emailPage/', 'refresh');
     }
-    public function deleteInboxEmail($message_id)
+    public function deleteInboxEmail()
     {
+        $message_id = $this->input->post('data');
         $this->load->model('model_email');
         $this->model_email->deleteEmailFromInbox($message_id);
         redirect('/controller_email/emailPage/', 'refresh');
