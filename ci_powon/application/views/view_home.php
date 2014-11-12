@@ -8,8 +8,7 @@
         <li><?php echo anchor('controller_member/searchMembersPage', 'Search Members'); ?></li>
 
         <!-- not yet implemented !-->
-        <li><?php echo anchor('home', 'View Emails'); ?></li>
-        <li><?php echo anchor('home', 'Send Email'); ?></li>
+        <li><?php echo anchor('controller_email/emailPage', 'View Emails'); ?></li>
         <li><?php echo anchor('home', 'Privacy Settings'); ?></li>
 
     </ul>
