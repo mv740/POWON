@@ -159,9 +159,19 @@ class Controller_member extends CI_Controller {
 
         $this->load->model('model_member');
         $powon_id = $this->session->userdata('powon_id');
+        $data['self'] = true;
 
         $data['title'] = "Profile";
         $data['result'] = $this->model_member->getProfileInfo($powon_id);
+
+        //Loading my functions for relations!
+        $this->load->model('model_relation');
+        //Grabbing a list of all members but myself so I cant relate myself.
+        $data['membersList'] = $this->model_member->getAllMembersNotSelfOrRelated($powon_id);
+        //grabbing the stuff to show all this dudes relations.
+        $data['family'] = $this->model_relation->getAllFamily($powon_id);
+        $data['friends'] = $this->model_relation->getAllFriends($powon_id);
+        $data['colleagues'] = $this->model_relation->getAllColleagues($powon_id);
 
         $this->load->view('templates/header',$data);
         $this->load->view('view_profile',$data);
@@ -171,12 +181,42 @@ class Controller_member extends CI_Controller {
     public function viewMemberProfilePage($powon_id) {
 
         $this->load->model('model_member');
+        
 
         $data['title'] = "Profile";
         $data['result'] = $this->model_member->getProfileInfo($powon_id);
+        $data['self'] = false;
+
+        $this->load->model('model_relation');
+
+        $data['family'] = $this->model_relation->getAllFamily($powon_id);
+        $data['friends'] = $this->model_relation->getAllFriends($powon_id);
+        $data['colleagues'] = $this->model_relation->getAllColleagues($powon_id);
+    
 
         $this->load->view('templates/header',$data);
         $this->load->view('view_profile',$data);
         $this->load->view('templates/footer');
+    }
+    public function checkRelation(){
+
+        $this->load->model('model_member');
+        $powon_id = $this->session->userdata('powon_id');
+        $relates_id = $this->input->post('member');
+        $family = $this->input->post('family');
+        $friend = $this->input->post('friend');
+        $colleague = $this->input->post('colleague');
+
+        $data = array(
+            'powon_id' => $powon_id,
+            'relates_powon_id' => $relates_id,
+            'family' => $family,
+            'friend' => $friend,
+            'colleague' => $colleague,
+            );
+        $this->load->model('model_relation');
+        $this->model_relation->checkRelation($powon_id, $relates_id, $data);
+
+        redirect('/controller_member/viewproFilePage/', 'refresh');
     }
 }
