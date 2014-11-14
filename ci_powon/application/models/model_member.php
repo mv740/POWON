@@ -7,6 +7,12 @@ class model_Member extends CI_Model{
         return $query->result();
 
     }
+    function getAllMembersNotSelfOrRelated($powon_id) {
+        $sql = "SELECT * FROM member WHERE NOT powon_id = '$powon_id'";
+        $query = $this->db->query($sql);
+        return $query->result();
+
+    }
 
     function getProfileInfo($powon_id) {
         $sql = "SELECT * FROM member WHERE powon_id = '$powon_id'";
