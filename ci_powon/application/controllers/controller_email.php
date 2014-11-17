@@ -61,17 +61,22 @@ class Controller_email extends Auth_Controller {
         $content = $this->input->post('content');
         $sendTo  = $this->input->post('member');
 
+        $now = date("Y-m-d H:i:s");
+
         $data = array(
             //'message_send_id' => $powon_id,
 
             'content' => $content,
             'sender_powon_id' => $powon_id,
-            'reciever_powon_id' => $sendTo
+            'reciever_powon_id' => $sendTo,
+            'date' => $now,
+            'sent_visibility' => true,
+            'recieved_visibility' =>true
 
         );
 
         $this->load->model('model_email');
-        $this->model_email->keepInSendBox($data);
+        //$this->model_email->keepInSendBox($data);
         $this->model_email->sendEmail($data);
 
         redirect('/controller_email/emailPage/', 'refresh');

@@ -10,7 +10,7 @@ echo "<br>";
         echo "<fieldset>";
         echo "<legend>from : " . $row->sender_powon_id;
         echo "</legend>";
-        echo "message ID: " . $row->message_id;
+        //echo "message ID: " . $row->message_id;
         echo "<br>";
         echo "date: " . $row->date;
         echo "<br>";
