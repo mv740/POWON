@@ -61,6 +61,7 @@ class Controller_email extends Auth_Controller {
         $content = $this->input->post('content');
         $sendTo  = $this->input->post('member');
 
+        date_default_timezone_set('America/Montreal');
         $now = date("Y-m-d H:i:s");
 
         $data = array(
