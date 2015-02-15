@@ -16,5 +16,7 @@ Private system where members can share information (text, photos and videos), ma
 
 
 
-`the app is configured to run only on clipper since there was a lot of weird security issues (cgiwrap) to circumvent. You will need to modify some small code to make it work on your own system (multiple urls)`
+`the app is configured to run only on clipper (concordia unversity encs network) since there was a lot of weird security issues (cgiwrap) to circumvent. You will need to modify some small code to make it work on your own system (multiple urls)`
+
+
 
