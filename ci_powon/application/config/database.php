@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'powon';
+$db['default']['hostname'] = 'clipper.encs.concordia.ca';
+$db['default']['username'] = 'lfc353_2';
+$db['default']['password'] = 'tD3K6k';
+$db['default']['database'] = 'lfc353_2';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

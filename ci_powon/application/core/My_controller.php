@@ -11,3 +11,19 @@ class Auth_Controller extends CI_Controller
         }
     }
 }
+
+class SecurityUser_controller extends CI_Controller
+{
+    function __construct()
+    {
+        parent::__construct();
+        if($this->session->userdata('logged_in'))
+        {
+            //redirect to controller member
+        }
+        else
+        {
+            redirect('Controller_main/');
+        }
+    }
+}

@@ -15,6 +15,16 @@ class Model_relation extends CI_Model{
         $query = $this->db->query($sql);
         return $query->result();
 	}
+	//ADDED AFTER THE DEMO
+	function getAllRelated($powon_id){
+		$sql = "SELECT member.first_name, member.last_name, member.powon_id FROM member_relates_member JOIN member ON relates_powon_id = member.powon_id WHERE (colleague = true OR family = true OR friend = true) AND member_relates_member.powon_id = '$powon_id'";
+        $query = $this->db->query($sql);
+        return $query->result();
+	}
+	
+    //ADDED AFTER THE DEMO
+
+
 	function insertRelation($data){
 		 $this->db->insert("member_relates_member", $data);
 	}

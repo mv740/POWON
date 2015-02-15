@@ -2,145 +2,26 @@
 
 class Controller_member extends CI_Controller {
 
-    public function loginPage() {
-        $data['title'] = "Login";
-        $this->load->view('templates/header',$data);
-        $this->load->view('view_login');
+
+    public function index()
+    {
+        $powon_id = $this->session->userdata('powon_id');
+
+        $this->load->model("model_group");
+        $this->load->model("model_admin");
+        $this->load->model("model_thread");
+
+        $data['memberOfGroup'] = $this->model_group->getGroupsMemberOf($powon_id);
+        $data['publicPosts'] = $this->model_admin->getPublicPosts();
+        $data['title'] = "Home";
+        $data['membersGroupThreads'] = $this->model_thread->getAllMembersGroupThreads($powon_id);
+
+
+        $data['isAdmin'] = $this->model_admin->isAdmin($powon_id);
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('view_home', $data);
         $this->load->view('templates/footer');
-    }
-
-    function authenticateLogin() {
-        $this->load->model('model_member');
-
-        $this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_checkUsernameAndPassword');
-
-        if($this->form_validation->run() == FALSE)
-        {
-            //field validation fail, redirect to login
-            $data['title'] = "Login Retry";
-            $this->load->view('templates/header',$data);
-            $this->load->view('view_login');
-            $this->load->view('templates/footer');
-        }
-        else
-        {
-
-            redirect('controller_main/homePage', 'refresh');
-        }
-    }
-
-    function checkUsernameAndPassword() {
-        //field validation success,  validate against database
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
-
-        $result = $this->model_member->login($username, $password);
-
-        //set session data
-        if($result) {
-            foreach($result as $row) {
-                $session_data = array(
-                    'powon_id' => $row->powon_id,
-                    'username' => $row->username,
-                    'status' => $row->status,
-                    'privilege' => $row->privilege,
-                    'logged_in' => true
-                );
-            }
-
-            $this->session->set_userdata($session_data);
-            return TRUE;
-        }
-        else {
-            $this->form_validation->set_message('checkUsernameAndPassword', 'Invalid username or password');
-            return false;
-        }
-    }
-
-    public function registerPage() {
-        $data['title'] = "Register";
-        $this->load->view('templates/header',$data);
-        $this->load->view('view_register');
-        $this->load->view('templates/footer');
-    }
-
-    public function authenticateRegistration() {
-
-        $this->load->model('model_member');
-
-        //existing member details
-        $this->form_validation->set_rules('existing_member_first_name', 'Existing Member First Name', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('existing_member_email', 'Existing Member Email', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('existing_member_dob', 'Existing Member Date Of Birth', 'trim|required|xss_clean|callback_checkFirstNameEmailDOB');
-
-        //login details
-        $this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('password', 'Password', 'trim|required|matches[retyped_password]|xss_clean');
-        $this->form_validation->set_rules('retyped_password', 'Retyped Password', 'trim|required|xss_clean');
-
-        //user data
-        $this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('last_name', 'Last Name', 'trim|xss_clean');
-        $this->form_validation->set_rules('address', 'Address', 'trim|xss_clean');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('dob', 'Date Of Birth', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('description', 'Description', 'trim|xss_clean');
-
-
-        if($this->form_validation->run() == FALSE) {
-            //field validation fail, redirect to registration
-            $data['title'] = "Registration Retry";
-            $this->load->view('templates/header',$data);
-            $this->load->view('view_register');
-            $this->load->view('templates/footer');
-        }
-        else {
-            $data['title'] = "Registration Successfull! Please Login";
-            $this->load->view('templates/header',$data);
-            $this->load->view('view_login');
-            $this->load->view('templates/footer');
-        }
-    }
-
-    function checkFirstNameEmailDOB() {
-        //field validation success,  validate against database
-        $existingMemberFirstName = $this->input->post('existing_member_first_name');
-        $existingMemberEmail = $this->input->post('existing_member_email');
-        $existingMemberDOB = $this->input->post('existing_member_dob');
-
-        $existingMemberData = array(
-            'first_name' => $existingMemberFirstName,
-            'email' => $existingMemberEmail,
-            'dob' => $existingMemberDOB
-        );
-
-        $result = $this->model_member->existingMemberCheck($existingMemberData);
-
-        if($result) {
-            $newMemberData = array(
-                'username' => $this->input->post('username'),
-                'password' => $this->input->post('password'),
-                'first_name' => $this->input->post('first_name'),
-                'last_name' => $this->input->post('last_name'),
-                'address' => $this->input->post('address'),
-                'email' => $this->input->post('email'),
-                'dob' => $this->input->post('dob'),
-                'description' => $this->input->post('description'),
-            );
-
-            $this->model_member->addNewMember($newMemberData);
-            return true;
-        }
-        else {
-            $this->form_validation->set_message('checkFirstNameEmailDOB', 'Invalid Existing Member Details');
-            return false;
-        }
-    }
-
-    public function logout() {
-        $this->session->sess_destroy();
-        redirect('controller_main', 'refresh');
     }
 
     public function searchMembersPage() {
@@ -172,6 +53,8 @@ class Controller_member extends CI_Controller {
         $data['family'] = $this->model_relation->getAllFamily($powon_id);
         $data['friends'] = $this->model_relation->getAllFriends($powon_id);
         $data['colleagues'] = $this->model_relation->getAllColleagues($powon_id);
+        //Interest garbage
+        $data['interests'] = $this->model_member->getAllInterests($powon_id);
 
         $this->load->view('templates/header',$data);
         $this->load->view('view_profile',$data);
@@ -181,10 +64,13 @@ class Controller_member extends CI_Controller {
     public function viewMemberProfilePage($powon_id) {
 
         $this->load->model('model_member');
-        
+
+        $sessionID = $this->session->userdata('powon_id');
+
 
         $data['title'] = "Profile";
         $data['result'] = $this->model_member->getProfileInfo($powon_id);
+        $data['interests'] = $this->model_member->getAllInterests($powon_id);
         $data['self'] = false;
 
         $this->load->model('model_relation');
@@ -192,12 +78,35 @@ class Controller_member extends CI_Controller {
         $data['family'] = $this->model_relation->getAllFamily($powon_id);
         $data['friends'] = $this->model_relation->getAllFriends($powon_id);
         $data['colleagues'] = $this->model_relation->getAllColleagues($powon_id);
+
+        //echo $this->model_member->canSeeGroupProfile($sessionID,$powon_id);
+
+        $data['isSameGroup'] = $this->model_member->canSeeGroupProfile($sessionID,$powon_id);
     
 
         $this->load->view('templates/header',$data);
         $this->load->view('view_profile',$data);
         $this->load->view('templates/footer');
     }
+
+    // RELATIONSHIT
+    function deleteRelationship()
+    {
+        $this->load->model('model_member');
+        $powon_id = $this->session->userdata('powon_id');
+        $relates_id = $this->input->post('member');
+
+        $data = array(
+            'powon_id' => $powon_id,
+            'relates_powon_id' => $relates_id,
+        );
+        $this->load->model('model_relation');
+        $this->model_relation->deleteRelation($data);
+
+        redirect('/controller_member/viewproFilePage/', 'refresh');
+    }
+
+
     public function checkRelation(){
 
         $this->load->model('model_member');
@@ -219,4 +128,91 @@ class Controller_member extends CI_Controller {
 
         redirect('/controller_member/viewproFilePage/', 'refresh');
     }
+    //PRIVACY STUFF
+
+    public function updatePrivacy(){
+        $this->load->model('model_member');
+        $powon_id = $this->session->userdata('powon_id');
+        
+        $fnprivacy = $this->input->post('fnameprivacy');
+        $lnprivacy = $this->input->post('lnameprivacy');
+        $addprivacy = $this->input->post('addressprivacy');
+        $dobprivacy = $this->input->post('dobprivacy');
+        $descprivacy = $this->input->post('descriptionprivacy');
+        $emailprivacy = $this->input->post('emailprivacy');
+
+        $dataprivacy = array(
+            'powon_id' => $powon_id,
+            'first_name_visibility' => $fnprivacy,
+            'last_name_visibility' =>  $lnprivacy,
+            'address_visibility' => $addprivacy,
+            'dob_visibility' => $dobprivacy,
+            'description_visibility' => $descprivacy,
+            'email_visibility' => $emailprivacy
+            );
+        $this->load->model('model_member');
+        $this->model_member->updatePrivacy($powon_id, $dataprivacy);
+
+        redirect('/controller_member/viewproFilePage/', 'refresh');
+    }
+
+    //PROFESSION STUFF
+
+    public function updateProfession(){
+        $this->load->model('model_member');
+        $powon_id = $this->session->userdata('powon_id');
+        
+        $profession = $this->input->post('profession');
+        
+
+        $dataprofession = array(
+            'powon_id' => $powon_id,
+            'profession' => $profession
+            );
+        $this->load->model('model_member');
+        $this->model_member->updateProfession($powon_id, $dataprofession);
+
+        redirect('/controller_member/viewproFilePage/', 'refresh');
+    }
+
+
+    //THE INTEREST SECTION
+
+    public function addInterest(){
+        $this->load->model('model_member');
+        $powon_id = $this->session->userdata('powon_id');
+        $newInterest = $this->input->post('interest');
+        $dataInterest = array(
+            'powon_id' => $powon_id,
+            'interests' => $newInterest
+            );
+        $this->load->model('model_member');
+        $exists = $this->model_member->checkInterest($powon_id, $newInterest);
+        if (empty($exists)) {
+            $this->model_member->addInterest($dataInterest);
+        }
+        else
+        {
+            //Add message interest is already in DB
+        }
+
+        redirect('/controller_member/viewproFilePage/', 'refresh');
+    }
+    public function deleteInterest()
+    {
+        $this->load->model('model_member');
+        $powon_id = $this->session->userdata('powon_id');
+        $interest = $this->input->post('interests');
+        $dataInterest = array(
+            'powon_id' => $powon_id,
+            'interests' => $interest
+        );
+        $this->load->model('model_member');
+        $this->model_member->deleteInterest($dataInterest);
+
+
+        redirect('/controller_member/viewproFilePage/', 'refresh');
+    }
+
+
 }
